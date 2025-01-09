@@ -1,4 +1,12 @@
+import FeaturedProducts from "@/components/home/FeaturedProducts";
+import Hero from "@/components/home/Hero";
+
 const HomePage = () => {
-  return <div>Store Starter</div>;
+  return (
+    <>
+      <Hero />
+      <FeaturedProducts />
+    </>
+  );
 };
 export default HomePage;
