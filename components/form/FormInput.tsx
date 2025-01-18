@@ -17,12 +17,15 @@ const FormInput = ({
 }: FormInputProps) => {
   return (
     <div className="mb-2">
-      <Label htmlFor={name}>{label || name}</Label>
+      <Label htmlFor={name} className="capitalize">
+        {label || name}
+      </Label>
       <Input
         id={name}
         type={type}
         defaultValue={defaultValue}
         placeholder={placeHolder}
+        required
       />
     </div>
   );
