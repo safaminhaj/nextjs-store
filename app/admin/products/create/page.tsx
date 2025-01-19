@@ -12,7 +12,7 @@ import { faker } from "@faker-js/faker";
 const CreateProductPage = () => {
   const name = faker.commerce.productName();
   const company = faker.company.name();
-  const description = faker.commerce.productDescription();
+  const description = faker.lorem.paragraph({ min: 10, max: 12 });
   return (
     <section>
       <h1 className="text-2xl font-semibold mb-8 capitalize">Create Product</h1>
@@ -20,10 +20,10 @@ const CreateProductPage = () => {
         <FormContainer action={createProductAction}>
           <div className="grid gap-4 md:grid-cols-2 my-4">
             <FormInput
+              name="name"
               type="text"
               label="product name"
               defaultValue={name}
-              name="name"
             />
             <FormInput
               name="company"

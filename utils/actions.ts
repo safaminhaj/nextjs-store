@@ -1,7 +1,21 @@
 "use server";
 import { prisma } from "@/utils/db";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { productSchema } from "./schemas";
 
+const getAuthUser = async () => {
+  const user = await currentUser();
+  if (!user) redirect("/");
+  return user;
+};
+
+const renderError = (error: unknown): { message: string } => {
+  console.log(error);
+  return {
+    message: error instanceof Error ? error.message : "An error occured",
+  };
+};
 export const fetchFeaturedProducts = async () => {
   const products = await prisma.product.findMany({
     where: {
@@ -49,5 +63,13 @@ export const createProductAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
-  return { message: "Product Created" };
+  const user = await getAuthUser();
+  try {
+    const rawData = Object.fromEntries(formData);
+    const validateFields = productSchema.parse(rawData);
+
+    return { message: "Product created" };
+  } catch (error) {
+    return renderError(error);
+  }
 };

@@ -22,6 +22,7 @@ const FormInput = ({
       </Label>
       <Input
         id={name}
+        name={name}
         type={type}
         defaultValue={defaultValue}
         placeholder={placeHolder}
