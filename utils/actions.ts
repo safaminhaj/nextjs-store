@@ -179,3 +179,59 @@ export const updateProductImageAction = async (
     return renderError(error);
   }
 };
+
+export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
+  const user = await getAuthUser();
+  const favorite = await prisma.favorite.findFirst({
+    where: {
+      productId,
+      clerkId: user.id,
+    },
+    select: { id: true },
+  });
+  return favorite?.id || null;
+};
+
+export const toggleFavoriteAction = async (prevState: {
+  productId: string;
+  favoriteId: string | null;
+  pathname: string;
+}) => {
+  try {
+    const user = await getAuthUser();
+    const { productId, favoriteId, pathname } = prevState;
+    if (favoriteId) {
+      await prisma.favorite.delete({
+        where: {
+          id: favoriteId,
+        },
+      });
+    } else {
+      await prisma.favorite.create({
+        data: {
+          productId,
+          clerkId: user.id,
+        },
+      });
+    }
+    revalidatePath(pathname);
+    return {
+      message: favoriteId ? "Removed from favorites" : "Added to favorites",
+    };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const fetchUserFavorites = async () => {
+  const user = await getAuthUser();
+  const favorites = await prisma.favorite.findMany({
+    where: {
+      clerkId: user.id,
+    },
+    include: {
+      product: true,
+    },
+  });
+  return favorites;
+};
