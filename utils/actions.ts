@@ -30,7 +30,7 @@ export const fetchFeaturedProducts = async () => {
       featured: true,
     },
   });
-  console.log(products);
+  // console.log(products);
   return products;
 };
 
