@@ -25,16 +25,12 @@ const renderError = (error: unknown): { message: string } => {
   };
 };
 export const fetchFeaturedProducts = async () => {
-  try {
-    const products = await prisma.product.findMany({
-      where: {
-        featured: true,
-      },
-    });
-    return products;
-  } catch (error) {
-    console.error("Prisma fetchProducts error:", error);
-  }
+  const products = await prisma.product.findMany({
+    where: {
+      featured: true,
+    },
+  });
+  return products;
 };
 
 export const fetchAllProducts = ({ search = "" }: { search: string }) => {
@@ -218,7 +214,6 @@ export const toggleFavoriteAction = async (prevState: {
         },
       });
     }
-    console.log(pathname);
     revalidatePath(pathname);
     return {
       message: favoriteId ? "Removed from favorites" : "Added to favorites",
