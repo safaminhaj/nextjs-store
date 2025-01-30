@@ -25,12 +25,16 @@ const renderError = (error: unknown): { message: string } => {
   };
 };
 export const fetchFeaturedProducts = async () => {
-  const products = await prisma.product.findMany({
-    where: {
-      featured: true,
-    },
-  });
-  return products;
+  try {
+    const products = await prisma.product.findMany({
+      where: {
+        featured: true,
+      },
+    });
+    return products;
+  } catch (error) {
+    console.error("Prisma fetchProducts error:", error);
+  }
 };
 
 export const fetchAllProducts = ({ search = "" }: { search: string }) => {
@@ -197,33 +201,31 @@ export const toggleFavoriteAction = async (prevState: {
   favoriteId: string | null;
   pathname: string;
 }) => {
-  // try {
-  //   const user = await getAuthUser();
-  //   const { productId, favoriteId, pathname } = prevState;
-  //   if (favoriteId) {
-  //     await prisma.favorite.delete({
-  //       where: {
-  //         id: favoriteId,
-  //       },
-  //     });
-  //   } else {
-  //     await prisma.favorite.create({
-  //       data: {
-  //         productId,
-  //         clerkId: user.id,
-  //       },
-  //     });
-  //   }
-  //   revalidatePath(pathname);
-  //   return {
-  //     message: favoriteId ? "Removed from favorites" : "Added to favorites",
-  //   };
-  // } catch (error) {
-  //   return renderError(error);
-  // }
-  return {
-    message: "Added to favorites",
-  };
+  try {
+    const user = await getAuthUser();
+    const { productId, favoriteId, pathname } = prevState;
+    if (favoriteId) {
+      await prisma.favorite.delete({
+        where: {
+          id: favoriteId,
+        },
+      });
+    } else {
+      await prisma.favorite.create({
+        data: {
+          productId,
+          clerkId: user.id,
+        },
+      });
+    }
+    console.log(pathname);
+    revalidatePath(pathname);
+    return {
+      message: favoriteId ? "Removed from favorites" : "Added to favorites",
+    };
+  } catch (error) {
+    return renderError(error);
+  }
 };
 
 export const fetchUserFavorites = async () => {
