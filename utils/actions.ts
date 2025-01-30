@@ -197,30 +197,33 @@ export const toggleFavoriteAction = async (prevState: {
   favoriteId: string | null;
   pathname: string;
 }) => {
-  try {
-    const user = await getAuthUser();
-    const { productId, favoriteId, pathname } = prevState;
-    if (favoriteId) {
-      await prisma.favorite.delete({
-        where: {
-          id: favoriteId,
-        },
-      });
-    } else {
-      await prisma.favorite.create({
-        data: {
-          productId,
-          clerkId: user.id,
-        },
-      });
-    }
-    // revalidatePath(pathname);
-    return {
-      message: favoriteId ? "Removed from favorites" : "Added to favorites",
-    };
-  } catch (error) {
-    return renderError(error);
-  }
+  // try {
+  //   const user = await getAuthUser();
+  //   const { productId, favoriteId, pathname } = prevState;
+  //   if (favoriteId) {
+  //     await prisma.favorite.delete({
+  //       where: {
+  //         id: favoriteId,
+  //       },
+  //     });
+  //   } else {
+  //     await prisma.favorite.create({
+  //       data: {
+  //         productId,
+  //         clerkId: user.id,
+  //       },
+  //     });
+  //   }
+  //   revalidatePath(pathname);
+  //   return {
+  //     message: favoriteId ? "Removed from favorites" : "Added to favorites",
+  //   };
+  // } catch (error) {
+  //   return renderError(error);
+  // }
+  return {
+    message: "Added to favorites",
+  };
 };
 
 export const fetchUserFavorites = async () => {
