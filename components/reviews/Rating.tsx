@@ -1,5 +1,5 @@
 import React from "react";
-import { FaStar } from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
 function Rating({ rating }: { rating: number }) {
   // rating = 2
@@ -17,7 +17,7 @@ function Rating({ rating }: { rating: number }) {
         return isFilled ? (
           <FaStar key={i} className={className} />
         ) : (
-          <FaStar key={i} className={className} />
+          <FaRegStar key={i} className={className} />
         );
       })}
     </div>
