@@ -6,6 +6,8 @@ import { fetchSingleProduct } from "@/utils/actions";
 import { formatCurrency } from "@/utils/format";
 import Image from "next/image";
 import ShareButton from "@/components/single-product/ShareButton";
+import ProductReviews from "@/components/reviews/ProductReviews";
+import SubmitReview from "@/components/reviews/SubmitReview";
 
 const SingleProductPage = async ({ params }: { params: { id: string } }) => {
   const product = await fetchSingleProduct(params.id);
@@ -45,6 +47,8 @@ const SingleProductPage = async ({ params }: { params: { id: string } }) => {
           <AddToCart productId={params.id} />
         </div>
       </div>
+      <ProductReviews productId={params.id} />
+      <SubmitReview productId={params.id} />
     </section>
   );
 };

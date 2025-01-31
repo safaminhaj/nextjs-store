@@ -1,0 +1,50 @@
+"use client";
+import { useUser } from "@clerk/nextjs";
+import React, { useState } from "react";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
+import FormContainer from "../form/FormContainer";
+import { createReviewAction } from "@/utils/actions";
+import RatingInput from "./RatingInput";
+import TextareaInput from "../form/TextareaInput";
+import { SubmitButton } from "../form/Buttons";
+
+function SubmitReview({ productId }: { productId: string }) {
+  const [isReviewFormVisible, setIsReviewFormVisible] = useState(false);
+  const { user } = useUser(); // auth() is used to RSC, and useUser() in client components
+  return (
+    <div>
+      <Button
+        size="lg"
+        className="capitalize"
+        onClick={() => {
+          setIsReviewFormVisible((prev) => !prev);
+        }}
+      >
+        leave review
+      </Button>
+      {isReviewFormVisible && (
+        <Card className="p-8 mt-8">
+          <FormContainer action={createReviewAction}>
+            <input type="hidden" name="productId" value={productId} />
+            <input
+              type="hidden"
+              name="authorName"
+              value={user?.firstName || "user"}
+            />
+            <input type="hidden" name="authorImageUrl" value={user?.imageUrl} />
+            <RatingInput name="rating" />
+            <TextareaInput
+              name="comment"
+              labelText="feedback"
+              defaultValue="Outstanding Product!!!"
+            />
+            <SubmitButton className="mt-4" />
+          </FormContainer>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+export default SubmitReview;
